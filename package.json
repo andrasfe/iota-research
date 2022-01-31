@@ -1,0 +1,32 @@
+{
+  "name": "dfs_iota_research",
+  "version": "1.0.0",
+  "description": "algo usage research for IOTA cumulative weight calculation ",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc -p . --declaration",
+    "test": "./node_modules/mocha/bin/_mocha test/Graph.spec.ts --require ts-node/register --timeout 999999",
+    "stats": "npx ts-node test/Stats.spec.ts --require ts-node/register --timeout 999999 -max-old-space-size=24000",
+    "stats2": "npx ts-node  test/Stats2.spec.ts --require ts-node/register --timeout 999999",
+    "stats3": "npx ts-node  test/Stats3.spec.ts --require ts-node/register --timeout 999999",
+    "tangle": "npx ts-node  test/IotaGraphBuilder.spec.ts --require ts-node/register --timeout 999999"
+  },
+  "repository": "https://bitbucket.org/andrasferenczi7/dfs_iota_research",
+  "author": "Andras L Ferenczi",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chai": "^4.2.22",
+    "@types/mocha": "^9.0.0",
+    "@types/node": "^16.11.6",
+    "chai": "^4.3.4",
+    "mocha": "^9.1.3",
+    "random-dag": "^1.0.4",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.4.4"
+  },
+  "dependencies": {
+    "@iota/client": "^2.2.2",
+    "index": "^0.4.0",
+    "typescript-map": "^0.1.0"
+  }
+}
