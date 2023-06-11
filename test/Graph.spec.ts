@@ -64,6 +64,19 @@ describe('VertexTest', () => {
             }
         });
 
+        it('should calculate calculateRatingDFID correctly', async () => {
+            try {
+                const cwc = new CumulativeWeightCalculator(graph);
+                const res = await cwc.calculateRatingDFID(0, 10);
+                console.log(res);
+                expect(res.get(0)).to.equal(5);
+            }
+            catch (err) {
+                console.error(err);
+            }
+        });
+
+
         it('should load tangle subgraph into our structures', async () => {
             const tangle = new Map<string,string[]>(Object.entries(JSON.parse(fs.readFileSync('./reverse-tangle.json').toString())));
 
