@@ -44,6 +44,7 @@ export class Graph<T> {
   async resetVertices() {
     this.vertices.forEach((vertex) => {
       vertex.status = Status.NEW;
+      vertex.weight = 0;
     });
   }
 

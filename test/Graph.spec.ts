@@ -6,6 +6,9 @@ interface Dummy {
     value: number;
 };
 
+const expected_map = {7:1, 3:2, 4:1, 5:1, 1:6, 6:1, 2:3, 0:8}
+
+
 describe('VertexTest', () => {
     const graph: Graph<Dummy> = new Graph();
 
@@ -67,9 +70,13 @@ describe('VertexTest', () => {
         it('should calculate calculateRatingDFID correctly', async () => {
             try {
                 const cwc = new CumulativeWeightCalculator(graph);
-                const res = await cwc.calculateRatingDFID(0, 10);
+                let res = await cwc.calculateRatingDFID(0, 5);
                 console.log(res);
-                expect(res.get(0)).to.equal(5);
+                expect(res.get(0)).to.equal(7);
+                res = await cwc.calculateRatingDFID(0, 8);
+                console.log(res);
+                expect(res.get(0)).to.equal(8);
+
             }
             catch (err) {
                 console.error(err);

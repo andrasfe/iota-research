@@ -109,8 +109,10 @@ export class CumulativeWeightCalculator<T> {
     // DLS abbreviation for Depth-limited search
     // https://en.wikipedia.org/wiki/Iterative_deepening_depth-first_search
     DLDFS(index: number, depthLimit:number, vertexToWeightMap: Map<number, number>, weigthGoal: number) {
+        this.searchTime = 0;
         const curIndex = this.graph.vertices[index];
-        if (vertexToWeightMap.get(index) >= weigthGoal) {
+        curIndex.status = Status.VISITED;
+        if (vertexToWeightMap.size >= weigthGoal) {
             return Result.SUCCESS;
         }
         else if (depthLimit == 0) {
@@ -143,6 +145,9 @@ export class CumulativeWeightCalculator<T> {
             if (cutoff_occurred) {
                 return Result.CUTOFF;
             }
+            else {
+                return Result.SUCCESS; 
+            }
         }
     }
     // alternative implementation for calculateRatingDfs using DFID (depth-first iterative deepening)
@@ -154,10 +159,10 @@ export class CumulativeWeightCalculator<T> {
     // if the cutoff was reached, increment the depth limit and repeat.
     // calls the recursive search function DLDFS
     async calculateRatingDFID(entrypoint: number, weightGoal:number): Promise<Map<number, number>> {
-        this.searchTime = 0;
         let depthLimit = 1;
-        await this.graph.resetVertices();
+
         while (true) {
+            await this.graph.resetVertices();
             const vertexToWeightMap: Map<number, number> = new Map();
             const result = this.DLDFS(entrypoint, depthLimit, vertexToWeightMap, weightGoal);
             if (result == Result.CUTOFF) {
