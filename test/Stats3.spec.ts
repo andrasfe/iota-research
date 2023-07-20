@@ -26,6 +26,16 @@ import { Graph, Vertex, CumulativeWeightCalculator } from '../main'
             duration = Date.now() - startTime;
             fs.appendFileSync('benchmarks.real.iri.csv', `${nodeCnt},${edgeCnt},${duration}\n`);
 
+            startTime = Date.now();
+            await cwc.calculateRatingDFID(i, 10000);
+            duration = Date.now() - startTime;
+            fs.appendFileSync('benchmarks.ours.10000.dfid.csv', `${nodeCnt},${edgeCnt},${duration}\n`);
+
+
+            startTime = Date.now();
+            await cwc.calculateRatingDFID(i, 50);
+            duration = Date.now() - startTime;
+            fs.appendFileSync('benchmarks.ours.50.dfid.csv', `${nodeCnt},${edgeCnt},${duration}\n`);
         }
     }
     catch (error) {
