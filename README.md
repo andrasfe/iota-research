@@ -31,6 +31,25 @@ cd reports/
 python report_iota_snapshot.py
 ```
 
+Por performance benchmarks build docker:
+
+```sh
+docker build -t my_image:v1 .
+docker run my_image:v1
+docker ps
+docker exec -it <container id> /bin/bash
+```
+
+To clean up:
+
+```sh
+docker rm $(docker ps -a -q)
+docker rmi $(docker images -q)
+```
+
+
+
+
 
 
 
