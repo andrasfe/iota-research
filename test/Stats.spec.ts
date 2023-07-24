@@ -1,30 +1,7 @@
 var dag = require('random-dag');
 import fs from 'fs';
 import { Graph, Vertex, CumulativeWeightCalculator } from '../main/'
-
-interface Edge {
-    from: number,
-    to: number
-};
-
-interface Dummy {
-    value: number;
-};
-
-const generate = (nodeNo: number, fillFactor: number): Array<[number, number]> => {
-    const max = fillFactor * nodeNo;
-    const edges: Array<[number, number]> = [];
-    for (let n = 0; n < nodeNo; n++) {
-        for (let end = n + 1; end < nodeNo; end++) {
-            const val = Math.floor(Math.random() * nodeNo + 1);
-            if (val < max) {
-                edges.push([n, end])
-            }
-        }
-    }
-
-    return edges;
-}
+import {Dummy, generate} from './GraphHelper'
 
 (async () => {
     let nodeCnt = 2000 +  Math.floor(Math.random()*1000);

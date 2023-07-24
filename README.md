@@ -31,7 +31,14 @@ cd reports/
 python report_iota_snapshot.py
 ```
 
-Por performance benchmarks build docker:
+For performance benchmarks:
+```sh
+// ALGO variable must be set. can have values: calculateRatingBfs, calculateRatingDfs
+
+ALGO=calculateRatingBfs npm run stats0
+```
+
+For performance benchmarks build docker:
 
 ```sh
 docker build -t my_image:v1 .

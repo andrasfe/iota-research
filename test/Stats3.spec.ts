@@ -1,3 +1,4 @@
+
 import fs from 'fs';
 import { Graph, Vertex, CumulativeWeightCalculator } from '../main'
 
@@ -24,6 +25,7 @@ import { Graph, Vertex, CumulativeWeightCalculator } from '../main'
             startTime = Date.now();
             await cwc.calculateRatingBfs(i);
             duration = Date.now() - startTime;
+
             fs.appendFileSync('benchmarks.real.iri.csv', `${nodeCnt},${edgeCnt},${duration}\n`);
 
             startTime = Date.now();

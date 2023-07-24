@@ -8,6 +8,7 @@ class Result {
     static CUTOFF = new Result();
 }
 export class CumulativeWeightCalculator<T> {
+    
     searchTime: number;
     constructor(public graph: Graph<T>) { }
     async countAllApprovers(startingSet: number[]): Promise<number> {
@@ -24,6 +25,7 @@ export class CumulativeWeightCalculator<T> {
         }
         return startingSet.length;
     }
+
     async calculateRatingBfs(edgeIndex: number): Promise<Map<number, number>> {
         const vertexToWeightMap: Map<number, number> = new Map();
         let grayVertices = this.graph.getAdjacentVertices(edgeIndex);
