@@ -13,6 +13,7 @@ coverage
 
 # output dir
 bin
+results/
 .vscode
 *tangle*.json
 *distribution*.json

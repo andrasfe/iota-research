@@ -12,14 +12,21 @@ RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
 # Add the cargo bin directory to PATH
 ENV PATH="/root/.cargo/bin:${PATH}"
-# WORKDIR /usr/src/app
+# Set the working directory
+WORKDIR /usr/src/app
+
+# Copy package*.json, tsconfig.json, and tangle.json
 COPY package*.json ./
-COPY tsconfig*.json ./
-# copy ./main directory into the image
-# copy tsconfig.json and tslint.json needed to build the project
-COPY ./main ./
+COPY tsconfig.json ./
+COPY tangle.json ./
+COPY entrypoint.sh ./entrypoint.sh
+
+# Copy ./main and ./test directories into the image
+COPY ./main ./main
+COPY ./test ./test
 # install dependencies
-RUN npm install
-COPY . .
+RUN yarn
+RUN yarn build
+
 EXPOSE 3000
-CMD [ "npm", "run", "stats3" ]
+ENTRYPOINT ["/bin/sh", "./entrypoint.sh"]
