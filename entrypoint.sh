@@ -1,6 +1,10 @@
 #!/bin/bash
-for i in {1..100000}
-do
-    yarn stats0
-    echo "Ran $i times"
-done
+# while true
+# do
+#     yarn stats0
+#     echo "Finished running stats"
+#     sleep 100000
+# done
+
+
+yarn stats0
