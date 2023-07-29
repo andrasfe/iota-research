@@ -1,11 +1,13 @@
 
 import fs from 'fs';
-import { Graph, Vertex, CumulativeWeightCalculator } from '../main'
+import { Graph, Vertex, CumulativeWeightCalculator } from '../main';
+import {Utils} from '../main';
 
 
 (async () => {
 
     try {
+        const profile = new Utils();
         const tangle = new Map<string, string[]>(Object.entries(JSON.parse(fs.readFileSync('./tangle.json').toString())));
 
         const graph = await Graph.fromTangle(tangle);
@@ -29,15 +31,18 @@ import { Graph, Vertex, CumulativeWeightCalculator } from '../main'
             fs.appendFileSync('benchmarks.real.iri.csv', `${nodeCnt},${edgeCnt},${duration}\n`);
 
             startTime = Date.now();
-            await cwc.calculateRatingDFID(i, 10000);
+            await cwc.calculateRatingDFID(i, 150255608);
             duration = Date.now() - startTime;
             fs.appendFileSync('benchmarks.ours.10000.dfid.csv', `${nodeCnt},${edgeCnt},${duration}\n`);
 
 
-            startTime = Date.now();
-            await cwc.calculateRatingDFID(i, 50);
-            duration = Date.now() - startTime;
-            fs.appendFileSync('benchmarks.ours.50.dfid.csv', `${nodeCnt},${edgeCnt},${duration}\n`);
+            // startTime = Date.now();
+            // await cwc.calculateRatingDFID(i, 1202556080);
+            // duration = Date.now() - startTime;
+            // fs.appendFileSync('benchmarks.ours.50.dfid.csv', `${nodeCnt},${edgeCnt},${duration}\n`);
+
+            // console.log(profile.cpuAverage())
+            console.log(profile.heapUsed())
         }
     }
     catch (error) {

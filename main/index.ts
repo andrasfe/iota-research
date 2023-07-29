@@ -15,6 +15,7 @@
 export {Graph} from './Graph';
 export {Vertex, Status} from './Vertex';
 export {CumulativeWeightCalculator} from './CumulativeWeightCalculator';
-export {IotaGraphBuilder} from './IotaGraphBuilder'
+export {IotaGraphBuilder} from './IotaGraphBuilder';
+export {Utils} from './Utils';
 
 

@@ -1,5 +1,7 @@
 import { Graph } from "./Graph";
 import { Vertex, Status } from "./Vertex";
+import {Utils} from "./Utils"
+
 // enum Result {success, failure, unknown}
 // node equivalent implementation
 class Result {
@@ -10,6 +12,8 @@ class Result {
 export class CumulativeWeightCalculator<T> {
     
     searchTime: number;
+    profiler = new Utils()
+
     constructor(public graph: Graph<T>) { }
     async countAllApprovers(startingSet: number[]): Promise<number> {
         const stack = [...startingSet];
@@ -114,7 +118,8 @@ export class CumulativeWeightCalculator<T> {
         this.searchTime = 0;
         const curIndex = this.graph.vertices[index];
         curIndex.status = Status.VISITED;
-        if (vertexToWeightMap.size >= weigthGoal) {
+        if (this.profiler.heapUsed() >= weigthGoal && depthLimit > 5) {
+            // console.log('limit reached')
             return Result.SUCCESS;
         }
         else if (depthLimit == 0) {
@@ -152,14 +157,7 @@ export class CumulativeWeightCalculator<T> {
             }
         }
     }
-    // alternative implementation for calculateRatingDfs using DFID (depth-first iterative deepening)
-    // https://en.wikipedia.org/wiki/Iterative_deepening_depth-first_search
-    // Start at the root of the tree. Set the depth limit to 1.
-    // Perform a depth-first search to depth 1.
-    // If the goal was not found, increment the depth limit to 2 and repeat.
-    // if failure, return the failure
-    // if the cutoff was reached, increment the depth limit and repeat.
-    // calls the recursive search function DLDFS
+
     async calculateRatingDFID(entrypoint: number, weightGoal:number): Promise<Map<number, number>> {
         let depthLimit = 1;
 
@@ -174,7 +172,7 @@ export class CumulativeWeightCalculator<T> {
                 throw new Error("An error occurred while calculating the rating");
             }
             else if(result == Result.SUCCESS) {
-                vertexToWeightMap.set(entrypoint, vertexToWeightMap.size + 1);
+                // vertexToWeightMap.set(entrypoint, vertexToWeightMap.size + 1);
                 return vertexToWeightMap;
             }
         }

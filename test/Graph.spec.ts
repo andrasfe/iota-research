@@ -70,10 +70,10 @@ describe('VertexTest', () => {
         it('should calculate calculateRatingDFID correctly', async () => {
             try {
                 const cwc = new CumulativeWeightCalculator(graph);
-                let res = await cwc.calculateRatingDFID(0, 5);
+                let res = await cwc.calculateRatingDFID(0, 50);
                 console.log(res);
-                expect(res.get(0)).to.equal(7);
-                res = await cwc.calculateRatingDFID(0, 8);
+                expect(res.get(0)).to.equal(8);
+                res = await cwc.calculateRatingDFID(0, 60);
                 console.log(res);
                 expect(res.get(0)).to.equal(8);
 
