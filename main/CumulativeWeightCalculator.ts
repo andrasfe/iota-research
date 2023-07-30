@@ -138,7 +138,7 @@ export class CumulativeWeightCalculator<T> {
                 const adjIndexRes = this.DLDFS(adjIndex, depthLimit - 1, vertexMap, weigthGoal);
                 if(adjIndexRes == Result.SUCCESS) {
                     result = Result.SUCCESS;
-                    // break;
+                    break;
                 }
             }
     
@@ -178,8 +178,8 @@ export class CumulativeWeightCalculator<T> {
         while (true) {
             const result = this.DLDFS(entrypoint, depthLimit, vertexMap, weightGoal);
             if(depthLimit >= maxDepth || result == Result.SUCCESS) {
-                // vertexToWeightMap.set(entrypoint, vertexToWeightMap.size + 1);
                 const vertexToWeightMap = this.convertMap(vertexMap);
+                // console.log('depth:',depthLimit, 'max weight', Math.max(...vertexToWeightMap.values()));
                 return vertexToWeightMap;
             }
             depthLimit++;

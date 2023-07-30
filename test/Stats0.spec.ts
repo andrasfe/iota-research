@@ -32,7 +32,7 @@ function sleep(ms:number) {
                 weightMap = await cwc.calculateRatingDfs(i);  
             }
             else if(ALGO_NAME == "DLS") {
-                weightMap = await cwc.calculateRatingDFID(i, 10, 15)
+                weightMap = await cwc.calculateRatingDFID(i, 10, 100)
             }
             else {
                 weightMap = await cwc.calculateRatingDfs(i);
