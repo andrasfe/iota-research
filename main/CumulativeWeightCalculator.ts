@@ -114,67 +114,75 @@ export class CumulativeWeightCalculator<T> {
     }
     // DLS abbreviation for Depth-limited search
     // https://en.wikipedia.org/wiki/Iterative_deepening_depth-first_search
-    DLDFS(index: number, depthLimit:number, vertexToWeightMap: Map<number, number>, weigthGoal: number) {
+    DLDFS(index: number, depthLimit:number, vertexMap: Map<number, Vertex<T>>, weigthGoal: number) {
+
         this.searchTime = 0;
-        const curIndex = this.graph.vertices[index];
-        curIndex.status = Status.VISITED;
-        if (this.profiler.heapUsed() >= weigthGoal && depthLimit > 5) {
-            // console.log('limit reached')
+        let result = Result.CUTOFF;
+        const curVertex = this.graph.vertices[index];
+
+        if (curVertex.status == Status.NEW) {
+            curVertex.status = Status.VISITED;
+        }
+
+        const vertexToWeightMap = this.convertMap(vertexMap);
+        if (Math.max(...vertexToWeightMap.values()) >= weigthGoal) {
             return Result.SUCCESS;
         }
         else if (depthLimit == 0) {
             return Result.CUTOFF;
         }
         else {
-            let cutoff_occurred = false;
-            this.graph.adj[index].forEach(adjIndex => {
+            for (let adjIndex of this.graph.adj[index]) {         
                 const adjVertex = this.graph.vertices[adjIndex]
-                if (adjVertex.status == Status.NEW) {
-                    adjVertex.status = Status.VISITED;
-                    adjVertex.parent = this.graph.vertices[index];
-                    const result = this.DLDFS(adjIndex, depthLimit - 1, vertexToWeightMap, weigthGoal);
-                    if (result == Result.CUTOFF) {
-                        cutoff_occurred = true;
-                    }
-                    else if (result == Result.SUCCESS) {
-                        return result;
-                    }
+                adjVertex.parent = curVertex;
+                const adjIndexRes = this.DLDFS(adjIndex, depthLimit - 1, vertexMap, weigthGoal);
+                if(adjIndexRes == Result.SUCCESS) {
+                    result = Result.SUCCESS;
+                    // break;
                 }
-            });
-            curIndex.status = Status.COMPLETED;
-            this.searchTime++;
-            curIndex.finishTime = this.searchTime;
-            curIndex.weight += 1;
-            if (curIndex.parent) {
-                curIndex.parent.weight += curIndex.weight;
             }
-            vertexToWeightMap.set(index, curIndex.weight);
-            if (cutoff_occurred) {
-                return Result.CUTOFF;
+    
+            if(curVertex.status == Status.VISITED) {
+                this.searchTime++;
+                curVertex.finishTime = this.searchTime;
+                curVertex.weight += 1;
+                if (curVertex.parent) {
+                    let ancestor= curVertex.parent;
+                    while(ancestor != null) {
+                        ancestor.weight += curVertex.weight;
+                        ancestor = ancestor.parent;
+                    } 
+                }
+                vertexMap.set(index, curVertex);
+                curVertex.status = Status.COMPLETED;
             }
-            else {
-                return Result.SUCCESS; 
-            }
+            
+            return result;
         }
     }
 
-    async calculateRatingDFID(entrypoint: number, weightGoal:number): Promise<Map<number, number>> {
+    convertMap(vertexMap: Map<number, Vertex<T>>) {
+        const vertexToWeightMap: Map<number, number> = new Map();
+
+        vertexMap.forEach((value, key) => {
+            vertexToWeightMap.set(key, value.weight);
+        });
+        return vertexToWeightMap;
+    }
+
+    async calculateRatingDFID(entrypoint: number, maxDepth: number, weightGoal:number): Promise<Map<number, number>> {
         let depthLimit = 1;
+        await this.graph.resetVertices();
+        const vertexMap: Map<number, Vertex<T>> = new Map();
 
         while (true) {
-            await this.graph.resetVertices();
-            const vertexToWeightMap: Map<number, number> = new Map();
-            const result = this.DLDFS(entrypoint, depthLimit, vertexToWeightMap, weightGoal);
-            if (result == Result.CUTOFF) {
-                depthLimit++;
-            }
-            else if(result == Result.FAILURE) {
-                throw new Error("An error occurred while calculating the rating");
-            }
-            else if(result == Result.SUCCESS) {
+            const result = this.DLDFS(entrypoint, depthLimit, vertexMap, weightGoal);
+            if(depthLimit >= maxDepth || result == Result.SUCCESS) {
                 // vertexToWeightMap.set(entrypoint, vertexToWeightMap.size + 1);
+                const vertexToWeightMap = this.convertMap(vertexMap);
                 return vertexToWeightMap;
             }
+            depthLimit++;
         }
     }
 }

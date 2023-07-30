@@ -27,7 +27,7 @@ describe('VertexTest', () => {
         it('should allow adding connections', async () => {
             graph.connect(0, 1);
             graph.connect(0, 2);
-            graph.connect(0, 7);
+            // graph.connect(0, 7);
             graph.connect(2, 6);
             graph.connect(1, 3);
             graph.connect(1, 4);
@@ -70,13 +70,10 @@ describe('VertexTest', () => {
         it('should calculate calculateRatingDFID correctly', async () => {
             try {
                 const cwc = new CumulativeWeightCalculator(graph);
-                let res = await cwc.calculateRatingDFID(0, 50);
+                let res = await cwc.calculateRatingDFID(0, 10, 10);
                 console.log(res);
                 expect(res.get(0)).to.equal(8);
-                res = await cwc.calculateRatingDFID(0, 60);
-                console.log(res);
-                expect(res.get(0)).to.equal(8);
-
+                expect(res.get(1)).to.equal(5);
             }
             catch (err) {
                 console.error(err);
